@@ -11,95 +11,69 @@
 
 package shapes;
 
-public class ThreeDimensionalShape extends Shape {
+import javax.swing.*;
+
+public class ThreeDimensionalShape extends JPanel {
 
     private float volume;
 
-    public ThreeDimensionalShape() {
-        super(3);
-    }
 
-    public float getVolume() {
-        return volume;
-    }
-
-    public void setVolume(float volume) {
-        this.volume = volume;
-    }
 }
 
 class Sphere extends ThreeDimensionalShape {
 
-    private final float radius;
 
-    public Sphere(float radius) {
-        this.radius = radius;
-        calculateVolume();
+    public Sphere() {
+
     }
 
-    private void calculateVolume() {
-        setVolume((float) ((4 / 3d) * (Math.PI * Math.pow(radius, 3))));
+    public float calculateVolume(float radius) {
+        return ((float) ((4 / 3d) * (Math.PI * Math.pow(radius, 3))));
     }
 }
 
 class Cube extends ThreeDimensionalShape {
 
-    private final float length;
+    public Cube() {
 
-    public Cube(float length) {
-        this.length = length;
-        calculateVolume();
     }
 
-    private void calculateVolume() {
-        setVolume((float) Math.pow(length, 3));
+    public float calculateVolume(float length) {
+         return ((float) Math.pow(length, 3));
     }
 }
 
 class Cone extends ThreeDimensionalShape {
 
-    private final float radius;
-    private final float height;
 
-    public Cone(float radius, float height) {
-        this.radius = radius;
-        this.height = height;
-        calculateVolume();
+
+    public Cone() {
+
     }
 
-    private void calculateVolume() {
-        setVolume((float) ((1 / 3d) * (Math.PI * Math.pow(radius, 2)) * height));
+    public float calculateVolume(float radius, float height) {
+       return ((float) ((1 / 3d) * (Math.PI * Math.pow(radius, 2)) * height));
     }
 }
 
 class Cylinder extends ThreeDimensionalShape {
 
-    private final float radius;
-    private final float height;
+    public Cylinder() {
 
-    public Cylinder(float radius, float height) {
-        this.radius = radius;
-        this.height = height;
-        calculateVolume();
     }
 
-    private void calculateVolume() {
-        setVolume((float) ((Math.PI * Math.pow(radius, 2)) * height));
+   public float calculateVolume(float radius, float height) {
+        return ((float) ((Math.PI * Math.pow(radius, 2)) * height));
     }
 }
 
 class Torus extends ThreeDimensionalShape {
 
-    private final float radius;
-    private final float majorRadius;
+    public Torus() {
 
-    public Torus(float majorRadius, float radius) {
-        this.majorRadius = majorRadius;
-        this.radius = radius;
-        calculateVolume();
     }
 
-    private void calculateVolume() {
-        setVolume((float) (Math.PI * Math.pow(radius, 2) * (2 * Math.PI * majorRadius)));
+    public float calculateVolume(float radius, float majorRadius) {
+       return ((float) (Math.PI * Math.pow(radius, 2) * (2 * Math.PI * majorRadius)));
     }
 }
