@@ -1,13 +1,12 @@
 // CMSC 335
-// Project 1
+// Project 2
 // Evan Martin
-// January 26, 2021
+// February 9, 2021
 
 //TwoDimensionalShape.java
-// The first class defines the TwoDimensionalShape object and
-// contains the area attribute
-// The rest of the classes in the file define various 2d shapes
-// and calculates their areas
+// The first class contains panels, fields, and labels common to two dimensional objects.
+// The various shape classes define their respective shape.
+// The final class defines a panel in which the various shapes are drawn.
 
 package shapes;
 
@@ -18,119 +17,128 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
 
-public class TwoDimensionalShape extends JPanel {
+public class TwoDimensionalShape extends Shape {
 
-    DrawPane drawPane;
-    JButton button = new JButton("Draw");
-    JLabel lengthLabel = new JLabel("Enter Length", JLabel.CENTER);
-    JTextField lengthText = new JTextField(20);
-    JPanel inputPanel = new JPanel();
+    TwoDimensionDrawPane drawPane = new TwoDimensionDrawPane();
+    JButton button = new JButton("Calculate Area & Draw Shape");
 
+    JLabel areaLabel = new JLabel("Area:", JLabel.CENTER);
+    JTextField areaField = new JTextField(20);
+    JPanel areaPanel = new JPanel();
+
+    public TwoDimensionalShape() {
+
+        areaField.setEditable(false);
+        areaPanel.add(areaLabel);
+        areaPanel.add(areaField);
+        resultPanel.add(button);
+        resultPanel.add(areaPanel);
+
+        add(drawPane);
+    }
 }
 
 class Circle extends TwoDimensionalShape {
 
+    private float radius;
+
     public Circle() {
 
-        JLabel radiusLabel = new JLabel("Enter Radius", JLabel.CENTER);
-        JTextField radiusText = new JTextField(20);
-        inputPanel.setLayout(new GridLayout(1,1));
         inputPanel.add(radiusLabel);
         inputPanel.add(radiusText);
-        add(inputPanel);
-        add(button);
+        inputPanel.add(spacerField);
 
         button.addActionListener(e -> {
-            drawPane.setCircle(Float.parseFloat(radiusText.getText()));
+            radius = Float.parseFloat(radiusText.getText());
+            drawPane.setCircle(radius);
+            areaField.setText(calculateArea(radius));
         });
-
-        drawPane = new DrawPane();
-        add(drawPane);
     }
 
-
+    private String calculateArea(float radius) {
+        return (String.valueOf((Math.PI * Math.pow(radius, 2))));
+    }
 }
 
 class Rectangle extends TwoDimensionalShape {
 
+    private float length;
+    private float width;
+
     public Rectangle() {
 
-        JLabel widthLabel = new JLabel("Enter Width", JLabel.CENTER);
-        JTextField widthText = new JTextField(20);
-        inputPanel.setLayout(new GridLayout(2,1));
         inputPanel.add(lengthLabel);
         inputPanel.add(lengthText);
         inputPanel.add(widthLabel);
         inputPanel.add(widthText);
-        add(inputPanel);
-        add(button);
 
         button.addActionListener(e -> {
-            drawPane.setRectangle(
-                    Integer.parseInt(lengthText.getText()),
-                    Integer.parseInt(widthText.getText())
-            );
+            length = Float.parseFloat(lengthText.getText());
+            width = Float.parseFloat(widthText.getText());
+            drawPane.setRectangle(length, width);
+            areaField.setText(calculateArea(length, width));
         });
+    }
 
-        drawPane = new DrawPane();
-        add(drawPane);
+    private String calculateArea(float length, float width) {
+        return String.valueOf(((length * width)));
     }
 }
 
 class Square extends TwoDimensionalShape {
 
-    public Square(){
-        inputPanel.setLayout(new GridLayout(1,1));
+    private float length;
+
+    public Square() {
+
         inputPanel.add(lengthLabel);
         inputPanel.add(lengthText);
-        add(inputPanel);
-        add(button);
+        inputPanel.add(spacerField);
 
         button.addActionListener(e -> {
-            drawPane.setSquare(Integer.parseInt(lengthText.getText()));
+            length = Integer.parseInt(lengthText.getText());
+            drawPane.setSquare(length);
+            areaField.setText(calculateArea(length));
         });
+    }
 
-        drawPane = new DrawPane();
-        add(drawPane);
+    private String calculateArea(float length) {
+        return String.valueOf(((length * length)));
     }
 }
 
-class Triangle extends TwoDimensionalShape{
+class Triangle extends TwoDimensionalShape {
 
-    public Triangle(){
+    private float base;
+    private float height;
 
-        JLabel baseLabel = new JLabel("Enter Base", JLabel.CENTER);
-        JTextField baseText = new JTextField(20);
-        JLabel heightLabel = new JLabel("Enter Height", JLabel.CENTER);
-        JTextField heightText = new JTextField(20);
-        inputPanel.setLayout(new GridLayout(2,1));
+    public Triangle() {
+
         inputPanel.add(heightLabel);
         inputPanel.add(heightText);
         inputPanel.add(baseLabel);
         inputPanel.add(baseText);
-        add(inputPanel);
-        add(button);
 
         button.addActionListener(e -> {
-            drawPane.setTriangle(
-                    Integer.parseInt(baseText.getText()),
-                    Integer.parseInt(heightText.getText())
-            );
+            base = Float.parseFloat(baseText.getText());
+            height = Float.parseFloat(heightText.getText());
+            drawPane.setTriangle(base, height);
+            areaField.setText(calculateArea(base, height));
         });
+    }
 
-        drawPane = new DrawPane();
-        add(drawPane);
+    private String calculateArea(float base, float height) {
+        return String.valueOf(.5 * (base) * (height));
     }
 }
 
-class DrawPane extends JPanel {
+class TwoDimensionDrawPane extends JPanel {
 
     private int x = 0;
     private int y = 0;
-    String shape = "circle";
+    String shape = "";
 
     public void setCircle(float radius) {
         shape = "circle";
@@ -146,14 +154,14 @@ class DrawPane extends JPanel {
         repaint();
     }
 
-    public void setSquare(float length){
+    public void setSquare(float length) {
         shape = "square";
         x = (int) length;
         y = (int) length;
         repaint();
     }
 
-    public void setTriangle(float base, float height){
+    public void setTriangle(float base, float height) {
         shape = "triangle";
         x = (int) base;
         y = (int) height;
@@ -170,17 +178,17 @@ class DrawPane extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        if(shape.equals("circle")) {
+        if (shape.equals("circle")) {
             g2d.drawOval(50, 50, x, y);
         }
 
-        if(shape.equals("rectangle") || shape.equals("square")) {
+        if (shape.equals("rectangle") || shape.equals("square")) {
             g2d.drawRect(50, 50, x, y);
         }
 
-        if(shape.equals("triangle")){
-            Image image = getToolkit().getImage("images/triangle.png");
-            g.drawImage(image,50,50, this);
+        if (shape.equals("triangle")) {
+            Image image = getToolkit().getImage("src/images/triangle.png");
+            g.drawImage(image, 50, 50, this);
         }
     }
 }
